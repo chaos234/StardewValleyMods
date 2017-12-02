@@ -7,6 +7,7 @@ using StardewValley;
 using StardewConfigFramework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using CommunityCenterBundleOverhaul.Framework;
 using StardewValley.Menus;
 
 namespace CommunityCenterBundleOverhaul
@@ -14,7 +15,6 @@ namespace CommunityCenterBundleOverhaul
     /// <summary>The mod entry point.</summary>
     public class CommunityCenterBundleOverhaul : Mod
     {
-
         // Initialising Variables
         internal static IModSettingsFramework Settings;
         internal ModOptionSelection dropDown;
@@ -86,7 +86,7 @@ namespace CommunityCenterBundleOverhaul
                     this.Monitor.Log(lang);
 
                     invalidateCache(this.Helper);
-                    this.Helper.Content.AssetEditors.Add(new CCBOBundlesEditor(this, this.Helper, dropDown));
+                    this.Helper.Content.AssetEditors.Add(new BundleEditor(this, this.Helper, dropDown));
                     Game1.addHUDMessage(new HUDMessage("Changed Community Center Bundle to: " + dropDown.Selection, 3) { noIcon = true, timeLeft = HUDMessage.defaultTime });
                     this.Monitor.Log("[CCBO] Bundle changed successfully. If smth. is missing, you must restart your game.");
                 };
@@ -119,8 +119,8 @@ namespace CommunityCenterBundleOverhaul
         {
             if (Context.IsWorldReady)
             {
-                this.Helper.Content.AssetEditors.Add(new CCBOJunimoEditor(this, this.Helper, dropDown));
-                this.Helper.Content.AssetEditors.Add(new CCBOBundlesEditor(this, this.Helper, dropDown));
+                this.Helper.Content.AssetEditors.Add(new ImageEditor(this, this.Helper, dropDown));
+                this.Helper.Content.AssetEditors.Add(new BundleEditor(this, this.Helper, dropDown));
             }
         }
     }

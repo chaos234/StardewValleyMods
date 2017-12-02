@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace CommunityCenterBundleOverhaul
+namespace CommunityCenterBundleOverhaul.Framework
 {
-    public partial class ParsBundles
+    internal class ParsBundles
     {
         [JsonProperty("Content")]
         public Content[] Content { get; set; }
@@ -12,10 +12,7 @@ namespace CommunityCenterBundleOverhaul
 
         [JsonProperty("Name")]
         public string Name { get; set; }
-    }
 
-    public partial class ParsBundles
-    {
         public static ParsBundles[] FromJson(string json) => JsonConvert.DeserializeObject<ParsBundles[]>(json, Converter.Settings);
     }
 }

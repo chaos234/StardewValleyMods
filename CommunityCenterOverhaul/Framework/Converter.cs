@@ -1,8 +1,8 @@
 using Newtonsoft.Json;
 
-namespace CommunityCenterBundleOverhaul
+namespace CommunityCenterBundleOverhaul.Framework
 {
-    public class Converter
+    internal class Converter
     {
         public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
         {

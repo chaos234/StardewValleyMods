@@ -1,17 +1,17 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using Microsoft.Xna.Framework.Graphics;
 using StardewConfigFramework;
 using StardewModdingAPI;
-using System;
 
-namespace CommunityCenterBundleOverhaul
+namespace CommunityCenterBundleOverhaul.Framework
 {
-    internal class CCBOJunimoEditor : IAssetEditor
+    internal class ImageEditor : IAssetEditor
     {
         private IModHelper helper;
         private ModOptionSelection dropDown;
         private CommunityCenterBundleOverhaul ccbo;
 
-        public CCBOJunimoEditor(CommunityCenterBundleOverhaul communityCenterBundleOverhaul, IModHelper helper, ModOptionSelection dropDown)
+        public ImageEditor(CommunityCenterBundleOverhaul communityCenterBundleOverhaul, IModHelper helper, ModOptionSelection dropDown)
         {
             this.ccbo = communityCenterBundleOverhaul;
             this.helper = helper;

@@ -1,18 +1,17 @@
-﻿using StardewConfigFramework;
+﻿using System.Collections.Generic;
+using StardewConfigFramework;
 using StardewModdingAPI;
-using System;
-using System.Collections.Generic;
 
-namespace CommunityCenterBundleOverhaul
+namespace CommunityCenterBundleOverhaul.Framework
 {
-    internal class CCBOBundlesEditor : IAssetEditor
+    internal class BundleEditor : IAssetEditor
     {
         private IModHelper helper;
         private ModOptionSelection dropDown;
 
         private CommunityCenterBundleOverhaul ccbo;
 
-        public CCBOBundlesEditor(CommunityCenterBundleOverhaul communityCenterBundleOverhaul, IModHelper helper, ModOptionSelection dropDown)
+        public BundleEditor(CommunityCenterBundleOverhaul communityCenterBundleOverhaul, IModHelper helper, ModOptionSelection dropDown)
         {
             this.ccbo = communityCenterBundleOverhaul;
             this.helper = helper;
