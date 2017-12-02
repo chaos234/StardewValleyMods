@@ -15,7 +15,9 @@ namespace CommunityCenterBundleOverhaul
         ** Properties
         *********/
         private ModOptionSelection DropDown;
-
+        private ModOptions options;
+        private ModOptionTrigger saveButton;
+        private string[] saves;
 
         /*********
         ** Public methods
@@ -31,57 +33,29 @@ namespace CommunityCenterBundleOverhaul
                 return;
             }
             this.Monitor.Log("Initialisation finished. Bundels are now out of control :D", LogLevel.Info);
+            saves = System.IO.Directory.GetFiles(Constants.ExecutionPath + "\\Mods\\CommunityCenterBundleOverhaul", "StardewConfig-*", System.IO.SearchOption.TopDirectoryOnly);
 
-            ModOptions options = ModOptions.LoadUserSettings(this);
-            IModSettingsFramework.Instance.AddModOptions(options);
-
-            var list = new ModSelectionOptionChoices
+            if (saves.Length < 1)
             {
-                {"default", helper.Translation.Get("default")},
-                {"v02", helper.Translation.Get("v02")},
-                {"v02a", helper.Translation.Get("v02a")},
-                {"v02b", helper.Translation.Get("v02b")},
-                {"v02c", helper.Translation.Get("v02c")}
-            };
-
-            this.DropDown = options.GetOptionWithIdentifier<ModOptionSelection>("bundle") ?? new ModOptionSelection("bundle", "Bundels", list);
-            options.AddModOption(this.DropDown);
-
-            this.DropDown.hoverTextDictionary = new Dictionary<string, string>
-            {
-                {"default", helper.Translation.Get("default.desc")},
-                {"v02", helper.Translation.Get("v02.desc")},
-                {"v02a", helper.Translation.Get("v02a.desc")},
-                {"v02b", helper.Translation.Get("v02b.desc")},
-                {"v02c", helper.Translation.Get("v02c.desc")}
-            };
-
-            var saveButton = new ModOptionTrigger("okButton", helper.Translation.Get("okButton"), OptionActionType.OK);
-            options.AddModOption(saveButton);
-
-            saveButton.ActionTriggered += id =>
-            {
-                this.Monitor.Log("[CCBO] Changing Bundle ...");
-
-                options.SaveUserSettings();
-
-                this.Monitor.Log(helper.Translation.Locale);
-
-                InvalidateCache(this.Helper);
-                Game1.addHUDMessage(new HUDMessage("Changed Community Center Bundle to: " + this.DropDown.Selection, 3) { noIcon = true, timeLeft = HUDMessage.defaultTime });
-                this.Monitor.Log("[CCBO] Bundle changed successfully. If smth. is missing, you must restart your game.");
-            };
+                create_menu();
+            }
+            
             SaveEvents.AfterLoad += SaveEvents_AfterLoad;
         }
-
-
+        
         /*********
         ** Private methods
         *********/
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
+
             if (!Context.IsWorldReady)
                 return;
+            //options = ModOptions.LoadCharacterSettings(this, Constants.SaveFolderName);
+            if (saves.Length > 0)
+            {
+                create_menu();
+            }
 
             this.Helper.Content.AssetEditors.Add(new ImageEditor(this.Helper, this.Monitor, this.DropDown));
             this.Helper.Content.AssetEditors.Add(new BundleEditor(this.Helper, this.Monitor, this.DropDown));
@@ -96,6 +70,49 @@ namespace CommunityCenterBundleOverhaul
 
             helper.Content.InvalidateCache(bundleXnb);
             helper.Content.InvalidateCache(JunimoNoteXnb);
+        }
+
+        private void create_menu()
+        {
+            options = ModOptions.LoadCharacterSettings(this, Constants.SaveFolderName);
+            IModSettingsFramework.Instance.AddModOptions(options);
+
+            var list = new ModSelectionOptionChoices
+            {
+                {"default", this.Helper.Translation.Get("default")},
+                {"v02", this.Helper.Translation.Get("v02")},
+                {"v02a", this.Helper.Translation.Get("v02a")},
+                {"v02b", this.Helper.Translation.Get("v02b")},
+                {"v02c", this.Helper.Translation.Get("v02c")}
+            };
+
+            this.DropDown = options.GetOptionWithIdentifier<ModOptionSelection>("bundle") ?? new ModOptionSelection("bundle", "Bundels", list);
+            options.AddModOption(this.DropDown);
+
+            this.DropDown.hoverTextDictionary = new Dictionary<string, string>
+            {
+                {"default", this.Helper.Translation.Get("default.desc")},
+                {"v02", this.Helper.Translation.Get("v02.desc")},
+                {"v02a", this.Helper.Translation.Get("v02a.desc")},
+                {"v02b", this.Helper.Translation.Get("v02b.desc")},
+                {"v02c", this.Helper.Translation.Get("v02c.desc")}
+            };
+
+            saveButton = new ModOptionTrigger("okButton", this.Helper.Translation.Get("okButton"), OptionActionType.OK);
+            options.AddModOption(saveButton);
+
+            saveButton.ActionTriggered += id =>
+            {
+                this.Monitor.Log("[CCBO] Changing Bundle ...");
+
+                options.SaveCharacterSettings(Constants.SaveFolderName);
+
+                this.Monitor.Log(this.Helper.Translation.Locale);
+
+                InvalidateCache(this.Helper);
+                Game1.addHUDMessage(new HUDMessage("Changed Community Center Bundle to: " + this.DropDown.Selection, 3) { noIcon = true, timeLeft = HUDMessage.defaultTime });
+                this.Monitor.Log("[CCBO] Bundle changed successfully. If smth. is missing, you must restart your game.");
+            };
         }
     }
 }
