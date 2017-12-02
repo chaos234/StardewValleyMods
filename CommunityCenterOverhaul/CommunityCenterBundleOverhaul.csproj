@@ -52,10 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CCBOBundlesEditor.cs" />
-    <Compile Include="CCBOJunimoEditor.cs" />
+    <Compile Include="Framework\BundleEditor.cs" />
+    <Compile Include="Framework\ImageEditor.cs" />
     <Compile Include="CommunityCenterBundleOverhaul.cs" />
-    <Compile Include="ParsBundles.cs" />
+    <Compile Include="Framework\Content.cs" />
+    <Compile Include="Framework\Bundle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
