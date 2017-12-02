@@ -3,7 +3,7 @@
   "Author": "Chaos234, 7yrsoftbadluck",
   "Version": "0.2",
   "UniqueID": "Chaos234.CommunityCenterBundleOverhaul",
-  "Description": "This mod aims to revamp the bundles in the Community Center.\nI found the rewards in the vanilla version to be lacklustre,\nand felt the bundles could be better. So I made this overhaul!",
+  "Description": "Revamps Community Center bundles with improved rewards.",
   "EntryDll": "CommunityCenterBundleOverhaul.dll",
   "MinimumApiVersion": "2.0",
   "Dependencies": [
