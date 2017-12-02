@@ -32,8 +32,8 @@ namespace CommunityCenterBundleOverhaul.Framework
         public void Edit<T>(IAssetData asset)
         {
             // get bundle
-            ParsBundles[] data = this.Helper.ReadJsonFile<ParsBundles[]>(@"bundles\bundles.json");
-            ParsBundles bundle = data.FirstOrDefault(p => p.ID == this.DropDown.SelectionIndex);
+            Bundle[] data = this.Helper.ReadJsonFile<Bundle[]>(@"bundles\bundles.json");
+            Bundle bundle = data.FirstOrDefault(p => p.ID == this.DropDown.SelectionIndex);
             if (bundle == null)
                 return;
 

@@ -1,6 +1,6 @@
 ﻿namespace CommunityCenterBundleOverhaul.Framework
 {
-    internal class ParsBundles
+    internal class Bundle
     {
         public Content[] Content { get; set; }
 

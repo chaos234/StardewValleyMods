@@ -42,8 +42,8 @@ namespace CommunityCenterBundleOverhaul.Framework
         private void GetBundleTexturefromJson(int selInd, IAssetData asset, string locale)
         {
             // get bundle
-            ParsBundles[] data = this.Helper.ReadJsonFile<ParsBundles[]>(@"bundles\bundles.json");
-            ParsBundles bundle = data.FirstOrDefault(p => p.ID == selInd);
+            Bundle[] data = this.Helper.ReadJsonFile<Bundle[]>(@"bundles\bundles.json");
+            Bundle bundle = data.FirstOrDefault(p => p.ID == selInd);
             if (bundle == null)
                 return;
 
