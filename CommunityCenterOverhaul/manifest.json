@@ -1,0 +1,17 @@
+﻿{
+	"Name": "CommunityCenterBundleOverhaul",
+	"Author": "7yrsoftbadluck,Chaos234",
+	"Version":
+	{
+		"MajorVersion": 0,
+		"MinorVersion": 2,
+		"PatchVersion": 0,
+		"Build": ""
+	},
+	"UniqueID": "7yrsoftbadluck.CommunityCenterBundleOverhaul",
+	"Description": "This mod aims to revamp the bundles in the Community Center.\nI found the rewards in the vanilla version to be lacklustre,\nand felt the bundles could be better. So I made this overhaul!",
+	"EntryDll":  "CommunityCenterBundleOverhaul.dll",
+	"Dependencies": [
+		{ "UniqueID": "Juice805.StardewConfigMenu" }
+	]
+}

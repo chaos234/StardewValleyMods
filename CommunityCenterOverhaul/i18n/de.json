@@ -1,0 +1,50 @@
+﻿{
+	/****
+	** Translation file for the community bundles
+	*****/
+
+	/// Bundles
+	"default": "Original CC Bundle",
+	"default.desc": "The original Community Center Bundle.",
+	"v02": "CC Overhaul Bundle (v0.2)",
+	"v02.desc": "This is a significantly harder version of the CC bundles.",
+	"v02a": "CC Overhaul Bundle (v0.2a)",
+	"v02a.desc": "An edit that replaces the Legendary Fish bundle with a Quality Fish bundle 5 Gold Quality of each of the Expert fish.",
+	"v02b": "CC Overhaul Bundle (v0.2b)",
+	"v02b.desc": "An edit that replaces the Legendary Fish bundle with a Quality Fish bundle. 5 Gold Quality of each of the 12 hardest fish to catch (Specialty Fish included).",
+	"v02c": "CC Overhaul Bundle (v0.2c)",
+	"v02c.desc": "An edit that replaces the 5 treasure chests reward for the Legendary Fish bundle with 30 Crab pots.",
+	"okButton": "Speichern",
+
+
+	/// Bundle Translations
+
+	"Beginner Crops": "Nutzpflanzen (Beginner)",
+	"Advanced Crops": "Nutzpflanzen (Fortgeschritten)",
+	"Expert Crops": "Nutzpflanzen (Experte)",
+	"Quality Crops": "Nutzpflanzen (Qualität)",
+	"Animal Produce": "Tiererzeugnisse",
+	"Artisan Products": "Handwerker",
+	"Beginner Foraging": "Sammeln (Beginner)",
+	"Reduce, Reuse, Recycle": "Wiederverwertung",
+	"Expert Foraging": "Sammeln (Experte)",
+	"D.I.Y": "D.I.Y",
+	"Construction": "Konstruktionen",
+	"Advanced Foraging": "Sammeln (Fortgeschritten)",
+	"Beginner Fish": "Angeln (Beginner)",
+	"Advanced Fish": "Angeln (Fortgeschritten)",
+	"Expert Fish": "Angeln (Experte)",
+	"Specialty Fish": "Spezialitätsfische",
+	"Legendary Fish": "Legendäre Fische",
+	"Quality Fish": "Qualitätsfische",
+	"Crab Pot": "Krabbenreuse",
+	"Blacksmith": "Schmied",
+	"Geology": "Geologe",
+	"Adventurer": "Abenteurer",
+	"Cooking Class": "Kochen",
+	"Community Garden": "Community Garten",
+	"BYO Night": "BYO Nacht",
+	"Jewellery Craft": "Yuwelen",
+	"Field Research": "Feldforschung",
+
+}

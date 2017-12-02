@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCenterOverhaul", "CommunityCenterOverhaul\CommunityCenterOverhaul.csproj", "{9C3D1F4C-7F36-44E5-A82A-7AD38CAA2F5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCenterBundleOverhaul", "CommunityCenterOverhaul\CommunityCenterBundleOverhaul.csproj", "{9C3D1F4C-7F36-44E5-A82A-7AD38CAA2F5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
