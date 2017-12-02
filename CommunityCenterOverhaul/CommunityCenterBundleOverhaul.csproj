@@ -55,6 +55,8 @@
     <Compile Include="CCBOBundlesEditor.cs" />
     <Compile Include="CCBOJunimoEditor.cs" />
     <Compile Include="CommunityCenterBundleOverhaul.cs" />
+    <Compile Include="Content.cs" />
+    <Compile Include="Converter.cs" />
     <Compile Include="ParsBundles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

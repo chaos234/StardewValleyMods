@@ -1,7 +1,7 @@
-﻿namespace CommunityCenterBundleOverhaul
-{
-    using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
+namespace CommunityCenterBundleOverhaul
+{
     public partial class ParsBundles
     {
         [JsonProperty("Content")]
@@ -14,29 +14,8 @@
         public string Name { get; set; }
     }
 
-    public partial class Content
-    {
-        [JsonProperty("BundleContent")]
-        public string BundleContent { get; set; }
-
-        [JsonProperty("BundleName")]
-        public string BundleName { get; set; }
-
-        [JsonProperty("Key")]
-        public string Key { get; set; }
-    }
-
     public partial class ParsBundles
     {
         public static ParsBundles[] FromJson(string json) => JsonConvert.DeserializeObject<ParsBundles[]>(json, Converter.Settings);
-    }
-
-    public class Converter
-    {
-        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
-        {
-            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-            DateParseHandling = DateParseHandling.None,
-        };
     }
 }
