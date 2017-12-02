@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using StardewConfigFramework;
 using StardewModdingAPI;
 
@@ -31,29 +31,25 @@ namespace CommunityCenterBundleOverhaul.Framework
 
         public void Edit<T>(IAssetData asset)
         {
-            string bundelsJson = System.IO.File.ReadAllText(this.Mod.Helper.DirectoryPath + "\\bundles\\bundles.json");
-            var data = ParsBundles.FromJson(bundelsJson);
+            // get bundle
+            ParsBundles[] data = this.Helper.ReadJsonFile<ParsBundles[]>(@"bundles\bundles.json");
+            ParsBundles bundle = data.FirstOrDefault(p => p.ID == this.DropDown.SelectionIndex);
+            if (bundle == null)
+                return;
 
-            foreach (var key in data)
+            // edit asset
+            foreach (Content content in bundle.Content)
             {
-                if (key.ID == this.DropDown.SelectionIndex)
+                if (!content.Key.Contains("Vault"))
                 {
-                    // Create new dictionary to replace the data bundles.xnb asset
-                    Dictionary<string, string> bundle = new Dictionary<string, string>();
-                    foreach (var key2 in key.Content)
-                    {
-                        if (!key2.Key.Contains("Vault"))
-                        {
-                            string translation = this.Mod.Translations.Get(key2.BundleName);
-                            this.Mod.Monitor.Log("[" + key2.Key + "] = " + key2.BundleName + key2.BundleContent + "/" + translation);
-                            asset.AsDictionary<string, string>().Set(key2.Key, key2.BundleName + key2.BundleContent + "/" + translation);
-                        }
-                        else
-                        {
-                            this.Mod.Monitor.Log("[" + key2.Key + "] = " + key2.BundleName + key2.BundleContent);
-                            asset.AsDictionary<string, string>().Set(key2.Key, key2.BundleName + key2.BundleContent);
-                        }
-                    }
+                    string translation = this.Mod.Translations.Get(content.BundleName);
+                    this.Mod.Monitor.Log($"[{content.Key}] = {content.BundleName}{content.BundleContent}/{translation}");
+                    asset.AsDictionary<string, string>().Set(content.Key, content.BundleName + content.BundleContent + "/" + translation);
+                }
+                else
+                {
+                    this.Mod.Monitor.Log($"[{content.Key}] = {content.BundleName}{content.BundleContent}");
+                    asset.AsDictionary<string, string>().Set(content.Key, content.BundleName + content.BundleContent);
                 }
             }
         }

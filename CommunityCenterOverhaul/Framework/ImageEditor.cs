@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System.Linq;
+using Microsoft.Xna.Framework.Graphics;
 using StardewConfigFramework;
 using StardewModdingAPI;
 
@@ -38,86 +39,63 @@ namespace CommunityCenterBundleOverhaul.Framework
         /*********
         ** Private methods
         *********/
-        private void GetBundleTexturefromJson(int selInd, IAssetData asset, string lng)
+        private void GetBundleTexturefromJson(int selInd, IAssetData asset, string locale)
         {
-            string ext = "png";
-            string fName = "JunimoNote";
+            // get bundle
+            ParsBundles[] data = this.Helper.ReadJsonFile<ParsBundles[]>(@"bundles\bundles.json");
+            ParsBundles bundle = data.FirstOrDefault(p => p.ID == selInd);
+            if (bundle == null)
+                return;
 
-            string bundelsJson = System.IO.File.ReadAllText(this.Mod.Helper.DirectoryPath + "\\bundles\\bundles.json");
-            var data = ParsBundles.FromJson(bundelsJson);
-
-            string image = "";
-
-            foreach (var key in data)
-            {
-                if (key.ID == selInd)
-                {
-                    var bundleName = key.Name;
-                    image = lng != "en-en" ? $"{fName}.{lng}.{bundleName}.{ext}" : $"{fName}.{bundleName}.{ext}";
-                    this.Mod.Monitor.Log(image);
-                }
-            }
-
+            // edit asset
             switch (selInd)
             {
                 case 0:
-                    switch (this.Mod.Locale)
                     {
-                        case "en-en":
-                            this.InvalidateImage(null, asset);
-                            break;
-                        case "de-de":
-                            this.InvalidateImage("de-DE", asset);
-                            break;
-                        case "ja-jp":
-                            this.InvalidateImage("ja-JP", asset);
-                            break;
-                        case "es-es":
-                            this.InvalidateImage("es-ES", asset);
-                            break;
-                        case "pt-br":
-                            this.InvalidateImage("pt-BR", asset);
-                            break;
-                        case "ru-ru":
-                            this.InvalidateImage("ru-RU", asset);
-                            break;
+                        string filenameLocale = this.GetFilenameLocale(locale);
+                        string filename = filenameLocale != null
+                            ? $@"LooseSprites\\JunimoNote.{filenameLocale}.xnb"
+                            : @"LooseSprites\\JunimoNote.xnb";
+                        Texture2D texture = this.Mod.Helper.Content.Load<Texture2D>(filename, ContentSource.GameContent);
+                        asset.AsImage().PatchImage(texture);
                     }
                     break;
+
                 case 1:
-                case 4:
-                    Texture2D cT = this.Mod.Helper.Content.Load<Texture2D>("bundles\\images\\" + image);
-                    asset
-                        .AsImage()
-                        .PatchImage(cT);
-                    break;
-                case 3:
                 case 2:
-                    Texture2D cT2 = this.Mod.Helper.Content.Load<Texture2D>("bundles\\images\\" + image);
-                    asset
-                        .AsImage()
-                        .PatchImage(cT2);
+                case 3:
+                case 4:
+                    {
+                        string filename = locale != "en-en"
+                            ? $"JunimoNote.{locale}.{bundle.Name}.png"
+                            : $"JunimoNote.{bundle.Name}.png";
+                        this.Mod.Monitor.Log(filename);
+                        Texture2D texture = this.Mod.Helper.Content.Load<Texture2D>($@"bundles\images\{filename}");
+                        asset.AsImage().PatchImage(texture);
+                    }
                     break;
             }
         }
 
-        private void InvalidateImage(string v, IAssetData asset)
+        private string GetFilenameLocale(string locale)
         {
-
-            if (v != null)
+            switch (locale)
             {
-                Texture2D cT1 = this.Mod.Helper.Content.Load<Texture2D>(@"LooseSprites\\JunimoNote." + v + ".xnb", ContentSource.GameContent);
-                asset
-                    .AsImage()
-                    .PatchImage(cT1);
+                case "en-en":
+                    return null;
+                case "de-de":
+                    return "de-DE";
+                case "ja-jp":
+                    return "ja-JP";
+                case "es-es":
+                    return "es-ES";
+                case "pt-br":
+                    return "pt-BR";
+                case "ru-ru":
+                    return "ru-RU";
+                default:
+                    return null;
             }
-            else
-            {
-                Texture2D cT1 = this.Mod.Helper.Content.Load<Texture2D>(@"LooseSprites\\JunimoNote.xnb", ContentSource.GameContent);
-                asset
-                    .AsImage()
-                    .PatchImage(cT1);
-            }
-
         }
     }
 }

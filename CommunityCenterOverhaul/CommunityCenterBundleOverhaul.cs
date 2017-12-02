@@ -44,11 +44,11 @@ namespace CommunityCenterBundleOverhaul
 
             var list = new ModSelectionOptionChoices
             {
-                {"default", GetTranslation(helper, "default", "")},
-                {"v02", GetTranslation(helper, "v02", "")},
-                {"v02a", GetTranslation(helper, "v02a", "")},
-                {"v02b", GetTranslation(helper, "v02b", "")},
-                {"v02c", GetTranslation(helper, "v02c", "")}
+                {"default", helper.Translation.Get("default")},
+                {"v02", helper.Translation.Get("v02")},
+                {"v02a", helper.Translation.Get("v02a")},
+                {"v02b", helper.Translation.Get("v02b")},
+                {"v02c", helper.Translation.Get("v02c")}
             };
 
             this.DropDown = options.GetOptionWithIdentifier<ModOptionSelection>("bundle") ?? new ModOptionSelection("bundle", "Bundels", list);
@@ -56,17 +56,17 @@ namespace CommunityCenterBundleOverhaul
 
             this.DropDown.hoverTextDictionary = new Dictionary<string, string>
             {
-                {"default", GetTranslation(helper, "default.desc", "")},
-                {"v02", GetTranslation(helper, "v02.desc", "")},
-                {"v02a", GetTranslation(helper, "v02a.desc", "")},
-                {"v02b", GetTranslation(helper, "v02b.desc", "")},
-                {"v02c", GetTranslation(helper, "v02c.desc", "")},
+                {"default", helper.Translation.Get("default.desc")},
+                {"v02", helper.Translation.Get("v02.desc")},
+                {"v02a", helper.Translation.Get("v02a.desc")},
+                {"v02b", helper.Translation.Get("v02b.desc")},
+                {"v02c", helper.Translation.Get("v02c.desc")}
             };
 
-            var saveButton = new ModOptionTrigger("okButton", GetTranslation(helper, "okButton", ""), OptionActionType.OK);
+            var saveButton = new ModOptionTrigger("okButton", helper.Translation.Get("okButton"), OptionActionType.OK);
             options.AddModOption(saveButton);
 
-            saveButton.ActionTriggered += (id) =>
+            saveButton.ActionTriggered += id =>
             {
                 this.Monitor.Log("[CCBO] Changing Bundle ...");
 
@@ -100,16 +100,10 @@ namespace CommunityCenterBundleOverhaul
             string bundleXnb = "Data\\Bundle.xnb";
             string JunimoNoteXnb = "LooseSprites\\JunimoNote.xnb";
 
-            this.Monitor.Log(bundleXnb + " " + JunimoNoteXnb);
+            this.Monitor.Log($"{bundleXnb} {JunimoNoteXnb}");
 
             helper.Content.InvalidateCache(bundleXnb);
             helper.Content.InvalidateCache(JunimoNoteXnb);
-        }
-
-        private string GetTranslation(IModHelper helper, string identifier, string var1)
-        {
-            var1 = helper.Translation.Get(identifier);
-            return var1;
         }
     }
 }
