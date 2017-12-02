@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using CommunityCenterBundleOverhaul.Framework;
 using StardewConfigFramework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using CommunityCenterBundleOverhaul.Framework;
 
 namespace CommunityCenterBundleOverhaul
 {
@@ -68,7 +68,6 @@ namespace CommunityCenterBundleOverhaul
                 this.Monitor.Log(helper.Translation.Locale);
 
                 InvalidateCache(this.Helper);
-                this.Helper.Content.AssetEditors.Add(new BundleEditor(this.Helper, this.Monitor, this.DropDown));
                 Game1.addHUDMessage(new HUDMessage("Changed Community Center Bundle to: " + this.DropDown.Selection, 3) { noIcon = true, timeLeft = HUDMessage.defaultTime });
                 this.Monitor.Log("[CCBO] Bundle changed successfully. If smth. is missing, you must restart your game.");
             };
@@ -90,7 +89,7 @@ namespace CommunityCenterBundleOverhaul
 
         private void InvalidateCache(IModHelper helper)
         {
-            string bundleXnb = "Data\\Bundle.xnb";
+            string bundleXnb = "Data\\Bundles.xnb";
             string JunimoNoteXnb = "LooseSprites\\JunimoNote.xnb";
 
             this.Monitor.Log($"{bundleXnb} {JunimoNoteXnb}");
