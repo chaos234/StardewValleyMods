@@ -1,25 +1,24 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
-using StardewModdingAPI;
-using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
-using StardewValley;
-using StardewConfigFramework;
-using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using CommunityCenterBundleOverhaul.Framework;
-using StardewValley.Menus;
+using StardewConfigFramework;
+using StardewModdingAPI;
+using StardewModdingAPI.Events;
+using StardewValley;
 
 namespace CommunityCenterBundleOverhaul
 {
     /// <summary>The mod entry point.</summary>
     public class CommunityCenterBundleOverhaul : Mod
     {
-        // Initialising Variables
-        internal static IModSettingsFramework Settings;
-        internal ModOptionSelection dropDown;
-        public String lang;
-        public ITranslationHelper i18n;
+        /*********
+        ** Properties
+        *********/
+        internal static IModSettingsFramework Settings { get; private set; }
+        internal ModOptionSelection DropDown { get; private set; }
+        public string Locale { get; private set; }
+        public ITranslationHelper Translations { get; private set; }
+
 
         /*********
         ** Public methods
@@ -29,73 +28,74 @@ namespace CommunityCenterBundleOverhaul
         public override void Entry(IModHelper helper)
         {
             bool isLoaded = this.Helper.ModRegistry.IsLoaded("Juice805.StardewConfigMenu");
-            lang = helper.Translation.Locale;
-            i18n = helper.Translation;
-            
+            this.Locale = helper.Translation.Locale;
+            this.Translations = helper.Translation;
+
             if (!isLoaded)
             {
                 this.Monitor.Log("Initialisation failed because StardewConfigMenu seems not to be correctly installed. This Mod will now do nothing.", LogLevel.Error);
+                return;
             }
-            else
+            this.Monitor.Log("Initialisation finished. Bundels are now out of control :D", LogLevel.Info);
+
+            CommunityCenterBundleOverhaul.Settings = IModSettingsFramework.Instance;
+            var options = ModOptions.LoadUserSettings(this);
+            CommunityCenterBundleOverhaul.Settings.AddModOptions(options);
+
+            var list = new ModSelectionOptionChoices
             {
-                this.Monitor.Log("Initialisation finished. Bundels are now out of control :D", LogLevel.Info);
-                
-                Settings = IModSettingsFramework.Instance;
-                var options = ModOptions.LoadUserSettings(this);
-                Settings.AddModOptions(options);
+                {"default", GetTranslation(helper, "default", "")},
+                {"v02", GetTranslation(helper, "v02", "")},
+                {"v02a", GetTranslation(helper, "v02a", "")},
+                {"v02b", GetTranslation(helper, "v02b", "")},
+                {"v02c", GetTranslation(helper, "v02c", "")}
+            };
 
-                String original = "";
-                String original_desc = "";
-                String v02 = "";
-                String v02_desc = "";
-                String v02a = "";
-                String v02a_desc = "";
-                String v02b = "";
-                String v02b_desc = "";
-                String v02c = "";
-                String v02c_desc = "";
-                String okButton = "";
+            this.DropDown = options.GetOptionWithIdentifier<ModOptionSelection>("bundle") ?? new ModOptionSelection("bundle", "Bundels", list);
+            options.AddModOption(this.DropDown);
 
-                var list = new ModSelectionOptionChoices();
-                list.Add("default", getTranslation(helper, "default", original));
-                list.Add("v02", getTranslation(helper, "v02", v02));
-                list.Add("v02a", getTranslation(helper, "v02a", v02a));
-                list.Add("v02b", getTranslation(helper, "v02b", v02b));
-                list.Add("v02c", getTranslation(helper, "v02c", v02c));
+            this.DropDown.hoverTextDictionary = new Dictionary<string, string>
+            {
+                {"default", GetTranslation(helper, "default.desc", "")},
+                {"v02", GetTranslation(helper, "v02.desc", "")},
+                {"v02a", GetTranslation(helper, "v02a.desc", "")},
+                {"v02b", GetTranslation(helper, "v02b.desc", "")},
+                {"v02c", GetTranslation(helper, "v02c.desc", "")},
+            };
 
-                dropDown = options.GetOptionWithIdentifier<ModOptionSelection>("bundle") ?? new ModOptionSelection("bundle", "Bundels", list, 0, true);
-                options.AddModOption(dropDown);
+            var saveButton = new ModOptionTrigger("okButton", GetTranslation(helper, "okButton", ""), OptionActionType.OK);
+            options.AddModOption(saveButton);
 
-                dropDown.hoverTextDictionary = new Dictionary<string, string>
-                {
-                    {"default", getTranslation(helper, "default.desc", original_desc)},
-                    {"v02", getTranslation(helper, "v02.desc", v02_desc)},
-                    {"v02a", getTranslation(helper, "v02a.desc", v02a_desc)},
-                    {"v02b", getTranslation(helper, "v02b.desc", v02b_desc)},
-                    {"v02c", getTranslation(helper, "v02c.desc", v02c_desc)},
-                };                            
+            saveButton.ActionTriggered += (id) =>
+            {
+                this.Monitor.Log("[CCBO] Changing Bundle ...");
 
-                var saveButton = new ModOptionTrigger("okButton", getTranslation(helper, "okButton", okButton), OptionActionType.OK);
-                options.AddModOption(saveButton);
+                options.SaveUserSettings();
 
-                saveButton.ActionTriggered += (id) => {
-                    this.Monitor.Log("[CCBO] Changing Bundle ...");
+                this.Monitor.Log(this.Locale);
 
-                    options.SaveUserSettings();
-
-                    this.Monitor.Log(lang);
-
-                    invalidateCache(this.Helper);
-                    this.Helper.Content.AssetEditors.Add(new BundleEditor(this, this.Helper, dropDown));
-                    Game1.addHUDMessage(new HUDMessage("Changed Community Center Bundle to: " + dropDown.Selection, 3) { noIcon = true, timeLeft = HUDMessage.defaultTime });
-                    this.Monitor.Log("[CCBO] Bundle changed successfully. If smth. is missing, you must restart your game.");
-                };
-                SaveEvents.AfterLoad += SaveEvents_AfterLoad;
-            }
-            
+                InvalidateCache(this.Helper);
+                this.Helper.Content.AssetEditors.Add(new BundleEditor(this, this.Helper, this.DropDown));
+                Game1.addHUDMessage(new HUDMessage("Changed Community Center Bundle to: " + this.DropDown.Selection, 3) { noIcon = true, timeLeft = HUDMessage.defaultTime });
+                this.Monitor.Log("[CCBO] Bundle changed successfully. If smth. is missing, you must restart your game.");
+            };
+            SaveEvents.AfterLoad += SaveEvents_AfterLoad;
         }
 
-        private void invalidateCache(IModHelper helper)
+
+        /*********
+        ** Private methods
+        *********/
+        private void SaveEvents_AfterLoad(object sender, EventArgs e)
+        {
+            if (!Context.IsWorldReady)
+                return;
+
+            this.Helper.Content.AssetEditors.Add(new ImageEditor(this, this.Helper, this.DropDown));
+            this.Helper.Content.AssetEditors.Add(new BundleEditor(this, this.Helper, this.DropDown));
+        }
+
+        private void InvalidateCache(IModHelper helper)
         {
             string bundleXnb = "Data\\Bundle.xnb";
             string JunimoNoteXnb = "LooseSprites\\JunimoNote.xnb";
@@ -106,22 +106,10 @@ namespace CommunityCenterBundleOverhaul
             helper.Content.InvalidateCache(JunimoNoteXnb);
         }
 
-        /*********
-        ** Private methods
-        *********/
-        private String getTranslation(IModHelper helper, String identifier, String var1)
+        private string GetTranslation(IModHelper helper, string identifier, string var1)
         {
             var1 = helper.Translation.Get(identifier);
             return var1;
-        }      
-
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
-        {
-            if (Context.IsWorldReady)
-            {
-                this.Helper.Content.AssetEditors.Add(new ImageEditor(this, this.Helper, dropDown));
-                this.Helper.Content.AssetEditors.Add(new BundleEditor(this, this.Helper, dropDown));
-            }
         }
     }
 }

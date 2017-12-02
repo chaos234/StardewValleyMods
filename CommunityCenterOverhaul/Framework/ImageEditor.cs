@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using StardewConfigFramework;
 using StardewModdingAPI;
 
@@ -7,43 +6,47 @@ namespace CommunityCenterBundleOverhaul.Framework
 {
     internal class ImageEditor : IAssetEditor
     {
-        private IModHelper helper;
-        private ModOptionSelection dropDown;
-        private CommunityCenterBundleOverhaul ccbo;
+        /*********
+        ** Properties
+        *********/
+        private readonly IModHelper Helper;
+        private readonly ModOptionSelection DropDown;
+        private readonly CommunityCenterBundleOverhaul Mod;
 
+
+        /*********
+        ** Public methods
+        *********/
         public ImageEditor(CommunityCenterBundleOverhaul communityCenterBundleOverhaul, IModHelper helper, ModOptionSelection dropDown)
         {
-            this.ccbo = communityCenterBundleOverhaul;
-            this.helper = helper;
-            this.dropDown = dropDown;
+            this.Mod = communityCenterBundleOverhaul;
+            this.Helper = helper;
+            this.DropDown = dropDown;
         }
 
         public bool CanEdit<T>(IAssetInfo asset)
         {
-            if (dropDown.SelectionIndex == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return asset.AssetNameEquals(@"LooseSprites\JunimoNote");
-            }
+            return this.DropDown.SelectionIndex != 0 && asset.AssetNameEquals(@"LooseSprites\JunimoNote");
         }
 
         public void Edit<T>(IAssetData asset)
         {
-            getBundleTextureFromXML(dropDown.SelectionIndex, asset, ccbo.lang);
+            this.GetBundleTexturefromJson(this.DropDown.SelectionIndex, asset, this.Mod.Locale);
         }
 
-        private void getBundleTextureFromXML(int selInd, IAssetData asset, String lng)
-        {
-            String ext = "png";
-            String fName = "JunimoNote";
 
-            String bundelsJson = System.IO.File.ReadAllText(ccbo.Helper.DirectoryPath + "\\bundles\\bundles.json");
+        /*********
+        ** Private methods
+        *********/
+        private void GetBundleTexturefromJson(int selInd, IAssetData asset, string lng)
+        {
+            string ext = "png";
+            string fName = "JunimoNote";
+
+            string bundelsJson = System.IO.File.ReadAllText(this.Mod.Helper.DirectoryPath + "\\bundles\\bundles.json");
             var data = ParsBundles.FromJson(bundelsJson);
 
-            String image = "";
+            string image = "";
 
             foreach (var key in data)
             {
@@ -51,68 +54,65 @@ namespace CommunityCenterBundleOverhaul.Framework
                 {
                     var bundleName = key.Name;
                     image = lng != "en-en" ? $"{fName}.{lng}.{bundleName}.{ext}" : $"{fName}.{bundleName}.{ext}";
-                    ccbo.Monitor.Log(image);
+                    this.Mod.Monitor.Log(image);
                 }
             }
 
             switch (selInd)
             {
                 case 0:
-                    switch (ccbo.lang)
+                    switch (this.Mod.Locale)
                     {
                         case "en-en":
-                            invalidateImage(null, asset);
+                            this.InvalidateImage(null, asset);
                             break;
                         case "de-de":
-                            invalidateImage("de-DE", asset);
+                            this.InvalidateImage("de-DE", asset);
                             break;
                         case "ja-jp":
-                            invalidateImage("ja-JP", asset);
+                            this.InvalidateImage("ja-JP", asset);
                             break;
                         case "es-es":
-                            invalidateImage("es-ES", asset);
+                            this.InvalidateImage("es-ES", asset);
                             break;
                         case "pt-br":
-                            invalidateImage("pt-BR", asset);
+                            this.InvalidateImage("pt-BR", asset);
                             break;
                         case "ru-ru":
-                            invalidateImage("ru-RU", asset);
+                            this.InvalidateImage("ru-RU", asset);
                             break;
                     }
                     break;
                 case 1:
                 case 4:
-                    Texture2D cT = ccbo.Helper.Content.Load<Texture2D>("bundles\\images\\" + image, ContentSource.ModFolder);
+                    Texture2D cT = this.Mod.Helper.Content.Load<Texture2D>("bundles\\images\\" + image);
                     asset
                         .AsImage()
                         .PatchImage(cT);
                     break;
                 case 3:
                 case 2:
-                    Texture2D cT2 = ccbo.Helper.Content.Load<Texture2D>("bundles\\images\\" + image, ContentSource.ModFolder);
+                    Texture2D cT2 = this.Mod.Helper.Content.Load<Texture2D>("bundles\\images\\" + image);
                     asset
                         .AsImage()
                         .PatchImage(cT2);
                     break;
-                default:
-                    break;
-
             }
         }
 
-        private void invalidateImage(string v, IAssetData asset)
+        private void InvalidateImage(string v, IAssetData asset)
         {
 
             if (v != null)
             {
-                Texture2D cT1 = ccbo.Helper.Content.Load<Texture2D>(@"LooseSprites\\JunimoNote." + v + ".xnb", ContentSource.GameContent);
+                Texture2D cT1 = this.Mod.Helper.Content.Load<Texture2D>(@"LooseSprites\\JunimoNote." + v + ".xnb", ContentSource.GameContent);
                 asset
                     .AsImage()
                     .PatchImage(cT1);
             }
             else
             {
-                Texture2D cT1 = ccbo.Helper.Content.Load<Texture2D>(@"LooseSprites\\JunimoNote.xnb", ContentSource.GameContent);
+                Texture2D cT1 = this.Mod.Helper.Content.Load<Texture2D>(@"LooseSprites\\JunimoNote.xnb", ContentSource.GameContent);
                 asset
                     .AsImage()
                     .PatchImage(cT1);

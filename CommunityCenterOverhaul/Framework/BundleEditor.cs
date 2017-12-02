@@ -6,16 +6,22 @@ namespace CommunityCenterBundleOverhaul.Framework
 {
     internal class BundleEditor : IAssetEditor
     {
-        private IModHelper helper;
-        private ModOptionSelection dropDown;
+        /*********
+        ** Properties
+        *********/
+        private readonly IModHelper Helper;
+        private readonly ModOptionSelection DropDown;
+        private readonly CommunityCenterBundleOverhaul Mod;
 
-        private CommunityCenterBundleOverhaul ccbo;
 
+        /*********
+        ** Public methods
+        *********/
         public BundleEditor(CommunityCenterBundleOverhaul communityCenterBundleOverhaul, IModHelper helper, ModOptionSelection dropDown)
         {
-            this.ccbo = communityCenterBundleOverhaul;
-            this.helper = helper;
-            this.dropDown = dropDown;
+            this.Mod = communityCenterBundleOverhaul;
+            this.Helper = helper;
+            this.DropDown = dropDown;
         }
 
         public bool CanEdit<T>(IAssetInfo asset)
@@ -25,12 +31,12 @@ namespace CommunityCenterBundleOverhaul.Framework
 
         public void Edit<T>(IAssetData asset)
         {
-            string bundelsJson = System.IO.File.ReadAllText(ccbo.Helper.DirectoryPath + "\\bundles\\bundles.json");
+            string bundelsJson = System.IO.File.ReadAllText(this.Mod.Helper.DirectoryPath + "\\bundles\\bundles.json");
             var data = ParsBundles.FromJson(bundelsJson);
 
             foreach (var key in data)
             {
-                if (key.ID == dropDown.SelectionIndex)
+                if (key.ID == this.DropDown.SelectionIndex)
                 {
                     // Create new dictionary to replace the data bundles.xnb asset
                     Dictionary<string, string> bundle = new Dictionary<string, string>();
@@ -38,13 +44,13 @@ namespace CommunityCenterBundleOverhaul.Framework
                     {
                         if (!key2.Key.Contains("Vault"))
                         {
-                            string translation = ccbo.i18n.Get(key2.BundleName);
-                            ccbo.Monitor.Log("[" + key2.Key + "] = " + key2.BundleName + key2.BundleContent + "/" + translation);
+                            string translation = this.Mod.Translations.Get(key2.BundleName);
+                            this.Mod.Monitor.Log("[" + key2.Key + "] = " + key2.BundleName + key2.BundleContent + "/" + translation);
                             asset.AsDictionary<string, string>().Set(key2.Key, key2.BundleName + key2.BundleContent + "/" + translation);
                         }
                         else
                         {
-                            ccbo.Monitor.Log("[" + key2.Key + "] = " + key2.BundleName + key2.BundleContent);
+                            this.Mod.Monitor.Log("[" + key2.Key + "] = " + key2.BundleName + key2.BundleContent);
                             asset.AsDictionary<string, string>().Set(key2.Key, key2.BundleName + key2.BundleContent);
                         }
                     }
