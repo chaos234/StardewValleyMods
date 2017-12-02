@@ -14,10 +14,7 @@ namespace CommunityCenterBundleOverhaul
         /*********
         ** Properties
         *********/
-        internal static IModSettingsFramework Settings { get; private set; }
-        internal ModOptionSelection DropDown { get; private set; }
-        public string Locale { get; private set; }
-        public ITranslationHelper Translations { get; private set; }
+        private ModOptionSelection DropDown;
 
 
         /*********
@@ -28,9 +25,6 @@ namespace CommunityCenterBundleOverhaul
         public override void Entry(IModHelper helper)
         {
             bool isLoaded = this.Helper.ModRegistry.IsLoaded("Juice805.StardewConfigMenu");
-            this.Locale = helper.Translation.Locale;
-            this.Translations = helper.Translation;
-
             if (!isLoaded)
             {
                 this.Monitor.Log("Initialisation failed because StardewConfigMenu seems not to be correctly installed. This Mod will now do nothing.", LogLevel.Error);
@@ -38,9 +32,8 @@ namespace CommunityCenterBundleOverhaul
             }
             this.Monitor.Log("Initialisation finished. Bundels are now out of control :D", LogLevel.Info);
 
-            CommunityCenterBundleOverhaul.Settings = IModSettingsFramework.Instance;
-            var options = ModOptions.LoadUserSettings(this);
-            CommunityCenterBundleOverhaul.Settings.AddModOptions(options);
+            ModOptions options = ModOptions.LoadUserSettings(this);
+            IModSettingsFramework.Instance.AddModOptions(options);
 
             var list = new ModSelectionOptionChoices
             {
@@ -72,10 +65,10 @@ namespace CommunityCenterBundleOverhaul
 
                 options.SaveUserSettings();
 
-                this.Monitor.Log(this.Locale);
+                this.Monitor.Log(helper.Translation.Locale);
 
                 InvalidateCache(this.Helper);
-                this.Helper.Content.AssetEditors.Add(new BundleEditor(this, this.Helper, this.DropDown));
+                this.Helper.Content.AssetEditors.Add(new BundleEditor(this.Helper, this.Monitor, this.DropDown));
                 Game1.addHUDMessage(new HUDMessage("Changed Community Center Bundle to: " + this.DropDown.Selection, 3) { noIcon = true, timeLeft = HUDMessage.defaultTime });
                 this.Monitor.Log("[CCBO] Bundle changed successfully. If smth. is missing, you must restart your game.");
             };
@@ -91,8 +84,8 @@ namespace CommunityCenterBundleOverhaul
             if (!Context.IsWorldReady)
                 return;
 
-            this.Helper.Content.AssetEditors.Add(new ImageEditor(this, this.Helper, this.DropDown));
-            this.Helper.Content.AssetEditors.Add(new BundleEditor(this, this.Helper, this.DropDown));
+            this.Helper.Content.AssetEditors.Add(new ImageEditor(this.Helper, this.Monitor, this.DropDown));
+            this.Helper.Content.AssetEditors.Add(new BundleEditor(this.Helper, this.Monitor, this.DropDown));
         }
 
         private void InvalidateCache(IModHelper helper)

@@ -10,17 +10,17 @@ namespace CommunityCenterBundleOverhaul.Framework
         ** Properties
         *********/
         private readonly IModHelper Helper;
+        private readonly IMonitor Monitor;
         private readonly ModOptionSelection DropDown;
-        private readonly CommunityCenterBundleOverhaul Mod;
 
 
         /*********
         ** Public methods
         *********/
-        public BundleEditor(CommunityCenterBundleOverhaul communityCenterBundleOverhaul, IModHelper helper, ModOptionSelection dropDown)
+        public BundleEditor(IModHelper helper, IMonitor monitor, ModOptionSelection dropDown)
         {
-            this.Mod = communityCenterBundleOverhaul;
             this.Helper = helper;
+            this.Monitor = monitor;
             this.DropDown = dropDown;
         }
 
@@ -42,13 +42,13 @@ namespace CommunityCenterBundleOverhaul.Framework
             {
                 if (!content.Key.Contains("Vault"))
                 {
-                    string translation = this.Mod.Translations.Get(content.BundleName);
-                    this.Mod.Monitor.Log($"[{content.Key}] = {content.BundleName}{content.BundleContent}/{translation}");
+                    string translation = this.Helper.Translation.Get(content.BundleName);
+                    this.Monitor.Log($"[{content.Key}] = {content.BundleName}{content.BundleContent}/{translation}");
                     asset.AsDictionary<string, string>().Set(content.Key, content.BundleName + content.BundleContent + "/" + translation);
                 }
                 else
                 {
-                    this.Mod.Monitor.Log($"[{content.Key}] = {content.BundleName}{content.BundleContent}");
+                    this.Monitor.Log($"[{content.Key}] = {content.BundleName}{content.BundleContent}");
                     asset.AsDictionary<string, string>().Set(content.Key, content.BundleName + content.BundleContent);
                 }
             }

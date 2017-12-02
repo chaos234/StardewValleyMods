@@ -11,16 +11,16 @@ namespace CommunityCenterBundleOverhaul.Framework
         ** Properties
         *********/
         private readonly IModHelper Helper;
+        private readonly IMonitor Monitor;
         private readonly ModOptionSelection DropDown;
-        private readonly CommunityCenterBundleOverhaul Mod;
 
 
         /*********
         ** Public methods
         *********/
-        public ImageEditor(CommunityCenterBundleOverhaul communityCenterBundleOverhaul, IModHelper helper, ModOptionSelection dropDown)
+        public ImageEditor(IModHelper helper, IMonitor monitor, ModOptionSelection dropDown)
         {
-            this.Mod = communityCenterBundleOverhaul;
+            this.Monitor = monitor;
             this.Helper = helper;
             this.DropDown = dropDown;
         }
@@ -32,7 +32,7 @@ namespace CommunityCenterBundleOverhaul.Framework
 
         public void Edit<T>(IAssetData asset)
         {
-            this.GetBundleTexturefromJson(this.DropDown.SelectionIndex, asset, this.Mod.Locale);
+            this.GetBundleTexturefromJson(this.DropDown.SelectionIndex, asset, this.Helper.Translation.Locale);
         }
 
 
@@ -56,7 +56,7 @@ namespace CommunityCenterBundleOverhaul.Framework
                         string filename = filenameLocale != null
                             ? $@"LooseSprites\\JunimoNote.{filenameLocale}.xnb"
                             : @"LooseSprites\\JunimoNote.xnb";
-                        Texture2D texture = this.Mod.Helper.Content.Load<Texture2D>(filename, ContentSource.GameContent);
+                        Texture2D texture = this.Helper.Content.Load<Texture2D>(filename, ContentSource.GameContent);
                         asset.AsImage().PatchImage(texture);
                     }
                     break;
@@ -69,8 +69,8 @@ namespace CommunityCenterBundleOverhaul.Framework
                         string filename = locale != "en-en"
                             ? $"JunimoNote.{locale}.{bundle.Name}.png"
                             : $"JunimoNote.{bundle.Name}.png";
-                        this.Mod.Monitor.Log(filename);
-                        Texture2D texture = this.Mod.Helper.Content.Load<Texture2D>($@"bundles\images\{filename}");
+                        this.Monitor.Log(filename);
+                        Texture2D texture = this.Helper.Content.Load<Texture2D>($@"bundles\images\{filename}");
                         asset.AsImage().PatchImage(texture);
                     }
                     break;
