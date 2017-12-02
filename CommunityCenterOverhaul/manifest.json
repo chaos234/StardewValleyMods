@@ -1,7 +1,7 @@
 ﻿{
   "Name": "Community Center Bundle Overhaul",
   "Author": "Chaos234, 7yrsoftbadluck",
-  "Version": "0.2.1",
+  "Version": "0.2.2",
   "UniqueID": "Chaos234.CommunityCenterBundleOverhaul",
   "Description": "Revamps Community Center bundles with improved rewards.",
   "EntryDll": "CommunityCenterBundleOverhaul.dll",
@@ -11,5 +11,5 @@
       "UniqueID": "Juice805.StardewConfigMenu"
     }
   ],
-  "UpdateKeys": []
+  "UpdateKeys": ["Nexus:1680"]
 }
