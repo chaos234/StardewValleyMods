@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using StardewConfigFramework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -33,7 +34,7 @@ namespace CommunityCenterBundleOverhaul
                 return;
             }
             this.Monitor.Log("Initialisation finished. Bundels are now out of control :D", LogLevel.Info);
-            saves = System.IO.Directory.GetFiles(Constants.ExecutionPath + "\\Mods\\CommunityCenterBundleOverhaul", "StardewConfig-*", System.IO.SearchOption.TopDirectoryOnly);
+            saves = Directory.GetFiles(this.Helper.DirectoryPath, "StardewConfig-*", SearchOption.TopDirectoryOnly);
 
             if (saves.Length < 1)
             {
