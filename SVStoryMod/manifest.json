@@ -1,0 +1,10 @@
+﻿{
+  "Name": "SV Story Mod",
+  "Author": "Chaos234",
+  "Version": "0.0.1",
+  "UniqueID": "Chaos234.SvStoryMod",
+  "Description": "Contains a story for Stardew Valley after year 3.",
+  "EntryDll": "SVStoryMod.dll",
+  "MinimumApiVersion": "2.0",
+  "UpdateKeys": []
+}
