@@ -165,7 +165,7 @@ namespace CommunityCenterBundleOverhaul_SDV_13
                     this.Helper.Content.AssetEditors.Add(new BundleEditor(this.Helper, this.Monitor, config));
                 }
             }
-            this.Monitor.Log("[CCBO] Bundle change saved successfully. Please open a Bundle so that chances will take effect.\nIf smth. is missing, you must restart your game.");
+            this.Monitor.Log("[CCBO] Bundle change saved successfully. Please open a Bundle so that chances will take effect. If smth. is missing, you must restart your game.");
         }
     }
 }
