@@ -24,24 +24,9 @@ namespace CommunityCenterBundleOverhaul_SDV_13
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            config = helper.ReadJsonFile<ModConfig>($"data/{Constants.SaveFolderName}.json");
+            helper.ConsoleCommands.Add("ccbo", helper.Translation.Get("ccbo.desc"), this.ccbo);
             this.Monitor.Log("Initialisation finished. Bundels are now out of control :D", LogLevel.Info);
 
-            switch (helper.Content.CurrentLocale)
-            {
-                case "de-DE":
-                    helper.ConsoleCommands.Add("ccbo", helper.Translation.Get("ccbo.desc"), this.ccbo);
-                    break;
-                case "ja-JP":
-                case "es-ES":
-                case "pt-BR":
-                case "ru-RU":
-                case "en-en":
-                    helper.ConsoleCommands.Add("ccbo", helper.Translation.Get("ccbo.desc"), this.ccbo);
-                    break;
-            }
-
-            
             SaveEvents.AfterLoad += SaveEvents_AfterLoad;
         }
 
@@ -51,7 +36,12 @@ namespace CommunityCenterBundleOverhaul_SDV_13
         private void ccbo(string command, string[] args)
         {
             Bundle[] data = this.Helper.ReadJsonFile<Bundle[]>(@"bundles\bundles.json");
-            config = this.Helper.ReadJsonFile<ModConfig>($"data/{Constants.SaveFolderName}.json");
+            if (!Context.IsMultiplayer)
+                config = this.Helper.ReadJsonFile<ModConfig>($"data/{Constants.SaveFolderName}.json") ?? new ModConfig();
+
+            if (Context.IsMultiplayer)
+                config = this.Helper.ReadJsonFile<ModConfig>($"data/{Game1.player.UniqueMultiplayerID}.json") ?? new ModConfig();
+
             string name;
             int id;
 
@@ -87,39 +77,57 @@ namespace CommunityCenterBundleOverhaul_SDV_13
                     {
                         case "0":
                             config.SelectionID = int.Parse(args[1]);
-                            this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", config);
+                            if (!Context.IsMultiplayer)
+                                this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", config);
+
+                            if (Context.IsMultiplayer)
+                                this.Helper.WriteJsonFile($"data/{Game1.player.UniqueMultiplayerID}.json", config);
+
                             dummyMethod(data);
                             break;
                         case "1":
                             config.SelectionID = int.Parse(args[1]);
-                            this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", config);
+                            if (!Context.IsMultiplayer)
+                                this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", config);
+
+                            if (Context.IsMultiplayer)
+                                this.Helper.WriteJsonFile($"data/{Game1.player.UniqueMultiplayerID}.json", config);
                             dummyMethod(data);
                             break;
                         case "2":
                             config.SelectionID = int.Parse(args[1]);
-                            this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", config);
+                            if (!Context.IsMultiplayer)
+                                this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", config);
+
+                            if (Context.IsMultiplayer)
+                                this.Helper.WriteJsonFile($"data/{Game1.player.UniqueMultiplayerID}.json", config);
                             dummyMethod(data);
                             break;
                         case "3":
                             config.SelectionID = int.Parse(args[1]);
-                            this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", config);
+                            if (!Context.IsMultiplayer)
+                                this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", config);
+
+                            if (Context.IsMultiplayer)
+                                this.Helper.WriteJsonFile($"data/{Game1.player.UniqueMultiplayerID}.json", config);
                             dummyMethod(data);
                             break;
                         case "4":
                             config.SelectionID = int.Parse(args[1]);
-                            this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", config);
+                            if (!Context.IsMultiplayer)
+                                this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", config);
+
+                            if (Context.IsMultiplayer)
+                                this.Helper.WriteJsonFile($"data/{Game1.player.UniqueMultiplayerID}.json", config);
                             dummyMethod(data);
                             break;
                     }
                 }
-            } catch (IndexOutOfRangeException e)
+            }
+            catch (IndexOutOfRangeException e)
             {
                 this.Monitor.Log(this.Helper.Translation.Get("ccbo.desc"));
             }
-            
-
-            
-
         }
 
         /*********
@@ -131,11 +139,30 @@ namespace CommunityCenterBundleOverhaul_SDV_13
             if (!Context.IsWorldReady)
                 return;
 
-            config = this.Helper.ReadJsonFile<ModConfig>($"data/{Constants.SaveFolderName}.json");
+            if (Context.IsMultiplayer)
+                useMP(config);
 
+            if (!Context.IsMultiplayer)
+                useSP(config);
+
+        }
+
+        private void useMP(ModConfig config)
+        {
+            config = this.Helper.ReadJsonFile<ModConfig>($"data/{Game1.player.UniqueMultiplayerID}.json") ?? new ModConfig();
+            triggerEditor(config);
+        }
+
+        private void useSP(ModConfig config)
+        {
+            config = this.Helper.ReadJsonFile<ModConfig>($"data/{Constants.SaveFolderName}.json") ?? new ModConfig();
+            triggerEditor(config);
+        }
+
+        private void triggerEditor(ModConfig config)
+        {
             this.Helper.Content.AssetEditors.Add(new ImageEditor(this.Helper, this.Monitor, config));
             this.Helper.Content.AssetEditors.Add(new BundleEditor(this.Helper, this.Monitor, config));
-            
         }
 
         private void InvalidateCache(IModHelper helper)

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCenterBundleOverha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCenterBundleOverhaul-SDV_13", "CommunityCenterBundleOverhaul-SDV_1.3\CommunityCenterBundleOverhaul-SDV_13.csproj", "{D6C89DD8-1759-420B-9C08-726522DE7DAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FridgeRescue", "FridgeRescue\FridgeRescue.csproj", "{D49F3E7E-C6A3-4156-ACB3-7BC340DAA3B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D6C89DD8-1759-420B-9C08-726522DE7DAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6C89DD8-1759-420B-9C08-726522DE7DAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6C89DD8-1759-420B-9C08-726522DE7DAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D49F3E7E-C6A3-4156-ACB3-7BC340DAA3B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D49F3E7E-C6A3-4156-ACB3-7BC340DAA3B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D49F3E7E-C6A3-4156-ACB3-7BC340DAA3B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D49F3E7E-C6A3-4156-ACB3-7BC340DAA3B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
